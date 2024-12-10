@@ -10,6 +10,9 @@ CHANNEL_ID = '@Dexnewtoken'
 
 bot = Bot(token=BOT_TOKEN)
 
+# Keep track of processed tokens
+processed_tokens = set()  # In-memory storage for token addresses
+
 # Fetch data from DEX Screener API
 def fetch_token_updates():
     retries = 3
@@ -41,6 +44,7 @@ async def send_telegram_message(message):
 
 # Main function
 async def main():
+    global processed_tokens
     try:
         print("Fetching latest token updates from DEX Screener...")
         data = fetch_token_updates()
@@ -49,7 +53,6 @@ async def main():
             print("No data received from DEX Screener.")
             return
 
-        print(f"Received data: {data}")  # Debugging: Print raw data
         for token in data:
             try:
                 token_name = token.get('name', 'Unknown Token')
@@ -64,6 +67,14 @@ async def main():
                 if telegram_link == 'N/A':
                     print(f"Skipping {token_name} as it does not have a Telegram link.")
                     continue
+
+                # Skip tokens already processed
+                if token_address in processed_tokens:
+                    print(f"Skipping {token_name} as it has already been processed.")
+                    continue
+
+                # Add token to the processed set
+                processed_tokens.add(token_address)
 
                 message = (
                     f"<b>New Token Update!</b>\n"
