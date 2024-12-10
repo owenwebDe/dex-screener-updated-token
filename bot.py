@@ -6,7 +6,7 @@ from telegram import Bot
 # Constants
 DEX_API_URL = 'https://api.dexscreener.com/token-profiles/latest/v1'
 BOT_TOKEN = '7724395426:AAE8gXFYSPC4DdkxHIbS4rK-mHbVB40bbJ0'
-CHANNEL_ID = '@sunpumpnewtokentron'
+CHANNEL_ID = '@Dexnewtoken'
 
 bot = Bot(token=BOT_TOKEN)
 
